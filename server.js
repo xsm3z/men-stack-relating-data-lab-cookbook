@@ -6,8 +6,10 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const morgan = require('morgan');
 const session = require('express-session');
-
-const authController = require('./controllers/auth.js');
+const authController = require('./controllers/auth');
+const foodsController = require('./controllers/foods');
+const isSignedIn = require('./middleware/is-signed-in');
+const passUserToView = require('./middleware/pass-user-to-view');
 
 const port = process.env.PORT ? process.env.PORT : '3000';
 
@@ -19,7 +21,11 @@ mongoose.connection.on('connected', () => {
 
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
-// app.use(morgan('dev'));
+app.use(passUserToView)
+app.use('/auth', authController);
+app.use(isSignedIn);
+app.use('/users/:userId/foods',foodsController);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
