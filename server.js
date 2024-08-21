@@ -9,13 +9,13 @@ const session = require('express-session');
 
 const isSignedIn = require('./middleware/is-signed-in.js');
 const passUserToView = require('./middleware/pass-user-to-view.js');
-const authController = require('./controllers/auth.js');
-const usersController = require('./controllers/users.js');
-const foodsController = require('./controllers/foods.js');
-const recipesController = require("./controllers/recipes.js");
-const ingredientsController = require("./controllers/ingredients.js");
+const authRoutes = require('./routes/auth.js');
+const usersRoutes = require('./routes/users.js');
+const foodsRoutes = require('./routes/foods.js');
+const recipesRoutes = require("./routes/recipes.js");
+const ingredientsRoutes = require("./routes/ingredients.js");
 
-const port = process.env.PORT ? process.env.PORT : '3000';
+const port = process.env.PORT ? process.env.PORT : '3001';
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -34,6 +34,8 @@ app.use(
   })
 );
 
+app.use(express.static('public'));
+
 app.get('/', (req, res) => {
   res.render('index.ejs', {
     user: req.session.user,
@@ -41,12 +43,12 @@ app.get('/', (req, res) => {
 });
 
 app.use(passUserToView);
-app.use('/auth', authController);
+app.use('/auth', authRoutes);
 app.use(isSignedIn);
-app.use('/users', usersController);
-app.use('/users/:userId/foods', foodsController);
-app.use("/recipes", recipesController);
-app.use("/ingredients", ingredientsController);
+app.use('/users', usersRoutes);
+app.use('/users/:userId/foods', foodsRoutes);
+app.use("/recipes", recipesRoutes);
+app.use("/ingredients", ingredientsRoutes);
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
