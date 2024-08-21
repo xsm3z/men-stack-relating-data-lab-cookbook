@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Recipe = require("../models/recipe");
-const Ingredient = require("../models/ingredient");
-const User = require("../models/user"); 
+const Recipe = require("../models/recipe.js");
+const Ingredient = require("../models/ingredient.js");
+const User = require("../models/user.js");
 
 router.get("/", async (req, res) => {
   try {
@@ -103,16 +103,13 @@ router.get("/:recipeId/add-ingredients", async (req, res) => {
 router.post("/:recipeId/ingredients", async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.recipeId);
-
     const ingredientIds = Array.isArray(req.body.ingredients)
       ? req.body.ingredients
       : [req.body.ingredients];
-
     recipe.ingredients = [
       ...new Set([...recipe.ingredients, ...ingredientIds]),
     ];
     await recipe.save();
-
     res.redirect(`/recipes/${req.params.recipeId}`);
   } catch (error) {
     console.error(error);

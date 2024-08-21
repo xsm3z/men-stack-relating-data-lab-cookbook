@@ -11,6 +11,7 @@
     <form action="/recipes/<%= recipe._id %>?_method=PUT" method="POST">
         Name: <input type="text" name="name" value="<%= recipe.name %>"><br>
         Instructions: <textarea name="instructions"><%= recipe.instructions %></textarea><br>
+
         <h2>Ingredients</h2>
         <% allIngredients.forEach(ingredient => { %>
             <div>

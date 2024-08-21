@@ -19,7 +19,7 @@
     <% } else { %>
         <p>No ingredients listed.</p>
     <% } %>
-
+    
     <form action="/recipes/<%= recipe._id %>/ingredients" method="POST">
         <h2>Select Ingredients to Add</h2>
         <% allIngredients.forEach(ingredient => { %>
